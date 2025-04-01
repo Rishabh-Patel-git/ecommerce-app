@@ -1,7 +1,4 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy Node.js app to Azure Web App - chatboxonline
+name: Build and deploy Angular app to Azure Web App - chatboxonline
 
 on:
   push:
@@ -13,23 +10,22 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v4
 
     - name: Set up Node.js version
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
         node-version: '20.x'
 
-    - name: npm install, build, and test
-      working-directory: .
+    - name: Install dependencies and build
       run: |
         npm install
         npm run build:prod
-    - name: npm install, build, and test
-      working-directory: .
+
+    - name: Verify build output
       run: |
-        ls ./dist/ecommerce-app
-        
+        if (Test-Path "./dist/ecommerce-app") { Write-Host "Build directory exists." } else { Write-Host "Build failed!"; exit 1 }
+
     - name: Login to Azure
       uses: azure/login@v2
       with:
@@ -37,7 +33,7 @@ jobs:
         tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
         subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
-    - name: 'Deploy to Azure Web App'
+    - name: Deploy to Azure Web App
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v3
       with:
