@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Use Ubuntu instead of Windows for consistency with logs
     permissions:
       id-token: write
       contents: read
@@ -21,13 +21,15 @@ jobs:
         node-version: '20.x'
 
     - name: Install dependencies and build
+      working-directory: /home/runner/work/ecommerce-app/ecommerce-app
       run: |
         npm install
         npm run build:prod
 
     - name: Verify build output
+      working-directory: /home/runner/work/ecommerce-app/ecommerce-app
       run: |
-        if (Test-Path "./dist/ecommerce-app") { Write-Host "Build directory exists." } else { Write-Host "Build failed!"; exit 1 }
+        if [ -d "./dist/ecommerce-app" ]; then echo "Build directory exists."; else echo "Build failed!"; exit 1; fi
 
     - name: Login to Azure
       uses: azure/login@v2
@@ -42,4 +44,5 @@ jobs:
       with:
         app-name: 'mywebappr2p'
         slot-name: 'Production'
-        package: ./dist/ecommerce-app
+        package: /home/runner/work/ecommerce-app/ecommerce-app/dist/ecommerce-app
+
