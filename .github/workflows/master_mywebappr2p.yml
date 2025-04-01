@@ -30,13 +30,14 @@ jobs:
       working-directory: /home/runner/work/ecommerce-app/ecommerce-app
       run: |
         if [ -d "./dist/ecommerce-app" ]; then echo "Build directory exists."; else echo "Build failed!"; exit 1; fi
+        ls ./dist/ecommerce-app
 
     - name: Login to Azure
       uses: azure/login@v2
       with:
-        client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
-        tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
-        subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
+        client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_2FF3A2BCDCB24164AF6BCD4FCB2C7E03 }}
+        tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_B612478257EF415792FBCEE83AE332C8 }}
+        subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_FA4E1757F0B94C9BB8530F089967366A }}
 
     - name: Deploy to Azure Web App
       id: deploy-to-webapp
